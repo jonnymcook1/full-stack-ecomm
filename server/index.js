@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const massive = require('massive')
 const session = require('express-session')
+const {registerUser, loginUser, getUser, logout} = require('./controllers/authController')
 
 const app = express()
 
@@ -19,6 +20,11 @@ app.use(
         }
     })
 )
+
+app.post('/auth/register', registerUser)
+app.post('/auth/login', loginUser)
+app.get('/auth/user', getUser)
+app.post('/auth/logout', logout)
 
 massive(process.env.CONNECTION_STRING).then(db => {
     app.set('db', db)
