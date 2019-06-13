@@ -1,12 +1,14 @@
 import React, {Component} from 'react'
 import axios from 'axios'
+import {Redirect} from 'react-router-dom'
 
 class Registration extends Component {
     constructor() {
         super() 
         this.state = {
             username: '',
-            password: ''
+            password: '',
+            redirect: false
         }
 
         this.handleUsername=this.handleUsername.bind(this)
@@ -25,10 +27,17 @@ class Registration extends Component {
     registerUser(e) {
         axios
         .post('/auth/register', {username: this.state.username, password: this.state.password})
-        .then(res => {console.log(res.data)})
+        .then(() => this.setState({redirect: true}))
+        .catch(() => {alert('Registration Unsuccessful')})
     }
 
     render() {
+
+        if(this.state.redirect){
+            alert('Please log in to continue!')
+            return <Redirect to='/login' />
+        }
+
         return (
             <div className='register'>
                 <h3>Create a New Account!</h3>
